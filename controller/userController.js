@@ -76,7 +76,9 @@ exports.updateUser = async (req, res, next) => {
      const update = req.body
      const userId = req.params.userId;
      await User.findByIdAndUpdate(userId, update);
+
      const user = await User.findById(userId)
+     
      res.status(200).json({
       data: user,
       message: 'User has been updated'
@@ -103,10 +105,16 @@ exports.deleteUser = async (req, res, next) => {
 exports.grantAccess = function(action, resource) {
     return async (req, res, next) => {
         try {
-            console.log(req,'req')
-            console.log(action, resource)
-            const permission = roles.can(req.user.role)[action](resource);
+            //get all roles using promise
+            const getAllRoles = await new Promise((resolve, reject) =>
+            resolve(roles)
+            )
+            //end
+
+            const permission = getAllRoles.can(req.user.role)[action](resource);
+            
             console.log(permission,'perm')
+
             if (!permission.granted) {
                 return res.status(401).json({
                     error: "You don't have enough permission to perform this action"

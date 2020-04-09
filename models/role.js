@@ -6,7 +6,7 @@ const roleSchema = new Schema({
 	"resource" : {type : String},
 	"action" : {type : String},
 	"attributes" : {type : String},
-	'$extend': [ {type : String} ]
+	'extend': [ {type : String} ]
 });
  
 const Role = mongoose.model('Role', roleSchema);
